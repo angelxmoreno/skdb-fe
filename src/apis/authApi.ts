@@ -71,3 +71,39 @@ export const logout = async (jwt: string): Promise<void> => {
     );
     return response.data;
 };
+
+/*
+i am going to have a series of api calls that use CRUD conventions. I will do this for several different resources. some endpoints require a JWT and others do not. I was thinking of creating a generic TS Class that could be inherited to be reusable for different resources. error handling and response bodies will be the same across diferent CRUD endpoints.
+
+GET /api/{resource} - list: returns {pagination:BEPagination, items:Resource[]}
+GET /api/{resource}/{id} - view: returns Resource
+POST /api/{resource} - create: sends a CreateResource interface and returns Resource
+PATCH /api/{resource}/{id} - update: sends a UpdateResource interface and returns Resource
+
+you will notice that I omitted deletes since the FE should not have any deletes for now.
+I would like you to help me develop this.
+do you have any questions?
+
+all list responses have {pagination:BEPagination, items:Resource[]}
+all view, successful create and successful updates return the resource interface
+all create and updates that fail BE validation have this structure and a 400 http response:
+
+{
+    "message": string,
+    "errors": {
+        "resource-property 1": {
+            "error code 1": "error message1",
+            "error code 2": "error message2"
+        },
+        "resource-property 2": {
+            "error code 1": "error message3",
+        }
+    }
+}
+
+all other errors from the BE will have this structure and can respond various http codes from 401 - 5xx:
+
+{
+    "message": "some message",
+}
+ */

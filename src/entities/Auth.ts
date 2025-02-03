@@ -1,3 +1,5 @@
+import {BaseEntity} from "@entities/Server";
+
 export const SUCCESS = 'SUCCESS';
 
 export interface AuthResponse {
@@ -7,12 +9,9 @@ export interface AuthResponse {
     jwt: string | undefined
 }
 
-export interface AuthUser {
-    id: number
+export interface AuthUser extends BaseEntity{
     name: string
     email: string
     profile_pic: string | null
     is_active: boolean
-    created: Date
-    modified: Date
 }

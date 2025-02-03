@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useAuthStore } from 'hooks/authStore';
+import { useAuthStore } from '@hooks/authStore';
 import { logout } from '@apis/authApi';
 import { Spinner, Alert, Container } from 'react-bootstrap';
 

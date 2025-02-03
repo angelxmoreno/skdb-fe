@@ -19,6 +19,7 @@ const AppHeader: FC = () => {
                     <Nav className="me-auto">
                         <AppNavLink to={'/'}>Home</AppNavLink>
                         <AppNavLink to={'/about'}>About</AppNavLink>
+                        <AppNavLink to={'/serial-killers'}>Serial Killers</AppNavLink>
                     </Nav>
                     <Nav className="ms-auto">
                         {user ? (

@@ -17,6 +17,8 @@ import { Route as LoginImport } from './routes/login'
 import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as SerialKillersIndexImport } from './routes/serial-killers.index'
+import { Route as SerialKillersIdImport } from './routes/serial-killers.$id'
 
 // Create/Update Routes
 
@@ -53,6 +55,18 @@ const AboutRoute = AboutImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SerialKillersIndexRoute = SerialKillersIndexImport.update({
+  id: '/serial-killers/',
+  path: '/serial-killers/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SerialKillersIdRoute = SerialKillersIdImport.update({
+  id: '/serial-killers/$id',
+  path: '/serial-killers/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,6 +116,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/serial-killers/$id': {
+      id: '/serial-killers/$id'
+      path: '/serial-killers/$id'
+      fullPath: '/serial-killers/$id'
+      preLoaderRoute: typeof SerialKillersIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/serial-killers/': {
+      id: '/serial-killers/'
+      path: '/serial-killers'
+      fullPath: '/serial-killers'
+      preLoaderRoute: typeof SerialKillersIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -114,6 +142,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/register': typeof RegisterRoute
+  '/serial-killers/$id': typeof SerialKillersIdRoute
+  '/serial-killers': typeof SerialKillersIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -123,6 +153,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/register': typeof RegisterRoute
+  '/serial-killers/$id': typeof SerialKillersIdRoute
+  '/serial-killers': typeof SerialKillersIndexRoute
 }
 
 export interface FileRoutesById {
@@ -133,6 +165,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/register': typeof RegisterRoute
+  '/serial-killers/$id': typeof SerialKillersIdRoute
+  '/serial-killers/': typeof SerialKillersIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -144,8 +178,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/register'
+    | '/serial-killers/$id'
+    | '/serial-killers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/forgot-password' | '/login' | '/logout' | '/register'
+  to:
+    | '/'
+    | '/about'
+    | '/forgot-password'
+    | '/login'
+    | '/logout'
+    | '/register'
+    | '/serial-killers/$id'
+    | '/serial-killers'
   id:
     | '__root__'
     | '/'
@@ -154,6 +198,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/register'
+    | '/serial-killers/$id'
+    | '/serial-killers/'
   fileRoutesById: FileRoutesById
 }
 
@@ -164,6 +210,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   RegisterRoute: typeof RegisterRoute
+  SerialKillersIdRoute: typeof SerialKillersIdRoute
+  SerialKillersIndexRoute: typeof SerialKillersIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -173,6 +221,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   RegisterRoute: RegisterRoute,
+  SerialKillersIdRoute: SerialKillersIdRoute,
+  SerialKillersIndexRoute: SerialKillersIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -190,7 +240,9 @@ export const routeTree = rootRoute
         "/forgot-password",
         "/login",
         "/logout",
-        "/register"
+        "/register",
+        "/serial-killers/$id",
+        "/serial-killers/"
       ]
     },
     "/": {
@@ -210,6 +262,12 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/serial-killers/$id": {
+      "filePath": "serial-killers.$id.tsx"
+    },
+    "/serial-killers/": {
+      "filePath": "serial-killers.index.tsx"
     }
   }
 }
