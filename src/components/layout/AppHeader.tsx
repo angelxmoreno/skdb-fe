@@ -3,7 +3,7 @@ import {FC} from "react";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import AppNavLink from "@components/layout/AppNavLink";
+import AppNavLink from "@components/layout/nav/AppNavLink";
 import {Link} from "@tanstack/react-router";
 import {useAuthStore} from "@hooks/authStore";
 

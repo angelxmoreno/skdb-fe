@@ -4,7 +4,11 @@ import {ListResponse} from "@entities/Server";
 import {SerialKiller} from "@entities/SerialKiller";
 import SerialKillersApi from "@apis/SerialKillersApi";
 import ProfileCard from "@components/cards/ProfileCard";
-import {Col, Row, Spinner} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
+import PageView from "@components/layout/pageContainer/PageView";
+import {useAuthStore} from "@hooks/authStore";
+import {Crumbs} from "@components/layout/pageContainer/BreadcrumbBuilder";
+import {ButtonPropsArray} from "@components/layout/pageContainer/ButtonPropsBuilder";
 
 const keyName = 'SerialKiller';
 type Entity = SerialKiller;
@@ -22,27 +26,32 @@ export const Route = createFileRoute('/serial-killers/')({
 })
 
 function RouteComponent() {
-    const { data, isLoading, error } = useQuery<ListResponse<Entity>>(listQuery);
+    const {data, isLoading, error} = useQuery<ListResponse<Entity>>(listQuery);
+    const {user} = useAuthStore()
 
+    const title = 'Serial Killers';
+    const subtitle = 'a list of serial killers'
+    const buttonProps: ButtonPropsArray = !user
+        ? []
+        : [
+            {sm: true, success: true, children: 'New', to: '/'}
+        ];
+    const crumbs: Crumbs = [{name: 'Home', uri: '/'}, 'Serial Killers'];
+    const errorText = !error
+        ? undefined
+        : `Error loading data: ${(error as Error).message}`
+    const contentLoading = isLoading;
+    const pageViewProps = {title, subtitle, buttonProps, crumbs, errorText, contentLoading};
 
     return (
-        <>
-            <h1>Serial Killers</h1>
-            {isLoading && (
-                <div className="text-center">
-                    <Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                </div>
-            )}            {error && <div>Error loading data: {(error as Error).message}</div>}
-
+        <PageView {...pageViewProps}>
             <Row xs={1} md={2} className="g-4">
                 {data?.items.map((entity, idx) => (
                     <Col key={idx}>
-                        <ProfileCard  serialKiller={entity}/>
+                        <ProfileCard serialKiller={entity}/>
                     </Col>
                 ))}
             </Row>
-        </>
+        </PageView>
     )
 }
