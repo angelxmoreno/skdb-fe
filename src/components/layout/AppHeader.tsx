@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import AppNavLink from "@components/layout/AppNavLink";
 import {Link} from "@tanstack/react-router";
-import {useAuthStore} from "@stores/authStore";
+import {useAuthStore} from "@hooks/authStore";
 
 const AppHeader: FC = () => {
     const {user} = useAuthStore();

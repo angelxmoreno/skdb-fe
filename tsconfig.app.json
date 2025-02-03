@@ -40,8 +40,8 @@
       "@routes/*": [
         "routes/*"
       ],
-      "@stores/*": [
-        "stores/*"
+      "@hooks/*": [
+        "hooks/*"
       ]
     }
   },

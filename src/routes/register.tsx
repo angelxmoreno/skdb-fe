@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { Alert, Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { register } from '@apis/authApi';
-import {useAuthStore} from "@stores/authStore"; // Make sure your register API accepts name, email, password
+import {useAuthStore} from "@hooks/authStore"; // Make sure your register API accepts name, email, password
 
 export const Route = createFileRoute('/register')({
     component: RegisterScreen,

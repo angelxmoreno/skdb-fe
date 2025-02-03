@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { Alert, Button, Col, Form, Row, Spinner } from 'react-bootstrap';
-import { useAuthStore } from '@stores/authStore'; // Zustand store
+import { useAuthStore } from '@hooks/authStore'; // Zustand store
 import { login } from '@apis/authApi'; // Auth API function
 import { AuthResponse } from '@entities/Auth'; // AuthResponse type
 
