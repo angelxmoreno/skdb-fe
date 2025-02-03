@@ -34,7 +34,7 @@ function RouteComponent() {
     const buttonProps: ButtonPropsArray = !user
         ? []
         : [
-            {sm: true, success: true, children: 'New', to: '/'}
+            {sm: true, success: true, children: 'New', to: '/serial-killers/create'}
         ];
     const crumbs: Crumbs = [{name: 'Home', uri: '/'}, 'Serial Killers'];
     const errorText = !error

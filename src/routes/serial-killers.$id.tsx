@@ -32,7 +32,7 @@ function SerialKillerViewRoute() {
     const buttonProps: ButtonPropsArray = !user
         ? []
         : [
-            {sm: true, success: true, children: 'New', to: '/'}
+            {sm: true, success: true, children: 'Edit', to: '/serial-killers/edit/$id', params:{id}}
         ];
     const crumbs: Crumbs = [
         {name: 'Home', uri: '/'},

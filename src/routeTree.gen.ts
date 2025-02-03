@@ -11,44 +11,28 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RegisterImport } from './routes/register'
-import { Route as LogoutImport } from './routes/logout'
-import { Route as LoginImport } from './routes/login'
-import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as AboutImport } from './routes/about'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as SerialKillersIndexImport } from './routes/serial-killers.index'
 import { Route as SerialKillersIdImport } from './routes/serial-killers.$id'
+import { Route as AuthRegisterImport } from './routes/_auth/register'
+import { Route as AuthLogoutImport } from './routes/_auth/logout'
+import { Route as AuthLoginImport } from './routes/_auth/login'
+import { Route as AuthForgotPasswordImport } from './routes/_auth/forgot-password'
+import { Route as AuthenticatedSerialKillersCreateImport } from './routes/_authenticated/serial-killers.create'
+import { Route as AuthenticatedSerialKillersEditIdImport } from './routes/_authenticated/serial-killers.edit.$id'
 
 // Create/Update Routes
-
-const RegisterRoute = RegisterImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LogoutRoute = LogoutImport.update({
-  id: '/logout',
-  path: '/logout',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ForgotPasswordRoute = ForgotPasswordImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AboutRoute = AboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,6 +54,44 @@ const SerialKillersIdRoute = SerialKillersIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthRegisterRoute = AuthRegisterImport.update({
+  id: '/_auth/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLogoutRoute = AuthLogoutImport.update({
+  id: '/_auth/logout',
+  path: '/logout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/_auth/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
+  id: '/_auth/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedSerialKillersCreateRoute =
+  AuthenticatedSerialKillersCreateImport.update({
+    id: '/serial-killers/create',
+    path: '/serial-killers/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedSerialKillersEditIdRoute =
+  AuthenticatedSerialKillersEditIdImport.update({
+    id: '/serial-killers/edit/$id',
+    path: '/serial-killers/edit/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -81,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -88,32 +117,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
-    '/forgot-password': {
-      id: '/forgot-password'
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordImport
+      preLoaderRoute: typeof AuthForgotPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
+    '/_auth/login': {
+      id: '/_auth/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
+      preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
-    '/logout': {
-      id: '/logout'
+    '/_auth/logout': {
+      id: '/_auth/logout'
       path: '/logout'
       fullPath: '/logout'
-      preLoaderRoute: typeof LogoutImport
+      preLoaderRoute: typeof AuthLogoutImport
       parentRoute: typeof rootRoute
     }
-    '/register': {
-      id: '/register'
+    '/_auth/register': {
+      id: '/_auth/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
+      preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof rootRoute
     }
     '/serial-killers/$id': {
@@ -130,49 +159,87 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SerialKillersIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/serial-killers/create': {
+      id: '/_authenticated/serial-killers/create'
+      path: '/serial-killers/create'
+      fullPath: '/serial-killers/create'
+      preLoaderRoute: typeof AuthenticatedSerialKillersCreateImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/serial-killers/edit/$id': {
+      id: '/_authenticated/serial-killers/edit/$id'
+      path: '/serial-killers/edit/$id'
+      fullPath: '/serial-killers/edit/$id'
+      preLoaderRoute: typeof AuthenticatedSerialKillersEditIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedSerialKillersCreateRoute: typeof AuthenticatedSerialKillersCreateRoute
+  AuthenticatedSerialKillersEditIdRoute: typeof AuthenticatedSerialKillersEditIdRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedSerialKillersCreateRoute: AuthenticatedSerialKillersCreateRoute,
+  AuthenticatedSerialKillersEditIdRoute: AuthenticatedSerialKillersEditIdRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/register': typeof RegisterRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
+  '/logout': typeof AuthLogoutRoute
+  '/register': typeof AuthRegisterRoute
   '/serial-killers/$id': typeof SerialKillersIdRoute
   '/serial-killers': typeof SerialKillersIndexRoute
+  '/serial-killers/create': typeof AuthenticatedSerialKillersCreateRoute
+  '/serial-killers/edit/$id': typeof AuthenticatedSerialKillersEditIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/register': typeof RegisterRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
+  '/logout': typeof AuthLogoutRoute
+  '/register': typeof AuthRegisterRoute
   '/serial-killers/$id': typeof SerialKillersIdRoute
   '/serial-killers': typeof SerialKillersIndexRoute
+  '/serial-killers/create': typeof AuthenticatedSerialKillersCreateRoute
+  '/serial-killers/edit/$id': typeof AuthenticatedSerialKillersEditIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/register': typeof RegisterRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/logout': typeof AuthLogoutRoute
+  '/_auth/register': typeof AuthRegisterRoute
   '/serial-killers/$id': typeof SerialKillersIdRoute
   '/serial-killers/': typeof SerialKillersIndexRoute
+  '/_authenticated/serial-killers/create': typeof AuthenticatedSerialKillersCreateRoute
+  '/_authenticated/serial-killers/edit/$id': typeof AuthenticatedSerialKillersEditIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | ''
     | '/about'
     | '/forgot-password'
     | '/login'
@@ -180,9 +247,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/serial-killers/$id'
     | '/serial-killers'
+    | '/serial-killers/create'
+    | '/serial-killers/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | ''
     | '/about'
     | '/forgot-password'
     | '/login'
@@ -190,37 +260,44 @@ export interface FileRouteTypes {
     | '/register'
     | '/serial-killers/$id'
     | '/serial-killers'
+    | '/serial-killers/create'
+    | '/serial-killers/edit/$id'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
-    | '/forgot-password'
-    | '/login'
-    | '/logout'
-    | '/register'
+    | '/_auth/forgot-password'
+    | '/_auth/login'
+    | '/_auth/logout'
+    | '/_auth/register'
     | '/serial-killers/$id'
     | '/serial-killers/'
+    | '/_authenticated/serial-killers/create'
+    | '/_authenticated/serial-killers/edit/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
-  ForgotPasswordRoute: typeof ForgotPasswordRoute
-  LoginRoute: typeof LoginRoute
-  LogoutRoute: typeof LogoutRoute
-  RegisterRoute: typeof RegisterRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthLogoutRoute: typeof AuthLogoutRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
   SerialKillersIdRoute: typeof SerialKillersIdRoute
   SerialKillersIndexRoute: typeof SerialKillersIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
-  ForgotPasswordRoute: ForgotPasswordRoute,
-  LoginRoute: LoginRoute,
-  LogoutRoute: LogoutRoute,
-  RegisterRoute: RegisterRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthLogoutRoute: AuthLogoutRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
   SerialKillersIdRoute: SerialKillersIdRoute,
   SerialKillersIndexRoute: SerialKillersIndexRoute,
 }
@@ -236,11 +313,12 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authenticated",
         "/about",
-        "/forgot-password",
-        "/login",
-        "/logout",
-        "/register",
+        "/_auth/forgot-password",
+        "/_auth/login",
+        "/_auth/logout",
+        "/_auth/register",
         "/serial-killers/$id",
         "/serial-killers/"
       ]
@@ -248,26 +326,41 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
+      "children": [
+        "/_authenticated/serial-killers/create",
+        "/_authenticated/serial-killers/edit/$id"
+      ]
+    },
     "/about": {
       "filePath": "about.tsx"
     },
-    "/forgot-password": {
-      "filePath": "forgot-password.tsx"
+    "/_auth/forgot-password": {
+      "filePath": "_auth/forgot-password.tsx"
     },
-    "/login": {
-      "filePath": "login.tsx"
+    "/_auth/login": {
+      "filePath": "_auth/login.tsx"
     },
-    "/logout": {
-      "filePath": "logout.tsx"
+    "/_auth/logout": {
+      "filePath": "_auth/logout.tsx"
     },
-    "/register": {
-      "filePath": "register.tsx"
+    "/_auth/register": {
+      "filePath": "_auth/register.tsx"
     },
     "/serial-killers/$id": {
       "filePath": "serial-killers.$id.tsx"
     },
     "/serial-killers/": {
       "filePath": "serial-killers.index.tsx"
+    },
+    "/_authenticated/serial-killers/create": {
+      "filePath": "_authenticated/serial-killers.create.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/serial-killers/edit/$id": {
+      "filePath": "_authenticated/serial-killers.edit.$id.tsx",
+      "parent": "/_authenticated"
     }
   }
 }
