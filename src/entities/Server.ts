@@ -11,7 +11,7 @@ export interface BePagination {
     nextPage: boolean
     sort: string
     direction: string
-    limit: number|undefined
+    limit: number | undefined
 }
 
 // List response structure.
@@ -20,14 +20,8 @@ export interface ListResponse<T> {
     items: T[];
 }
 
-// Validation error format for create/update failures.
-export interface BEValidationError {
+export interface BeError {
     message: string;
-    errors?: {
-        [field: string]: {
-            [errorCode: string]: string;
-        };
-    };
 }
 
 export interface BaseEntity {
