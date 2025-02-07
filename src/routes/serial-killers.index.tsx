@@ -7,13 +7,14 @@ import {useAuthStore} from "@hooks/authStore";
 import {Crumbs} from "@components/layout/pageContainer/BreadcrumbBuilder";
 import {ButtonPropsArray} from "@components/layout/pageContainer/ButtonPropsBuilder";
 import SerialKillerQueries from "@apis/resources/SerialKillerQueries";
+import PaginationCounter from "@components/pagination-counter/PaginationCounter";
 
 export const Route = createFileRoute('/serial-killers/')({
     component: RouteComponent,
 })
 
 function RouteComponent() {
-    const {data, isLoading, error} = useQuery(SerialKillerQueries.list);
+    const {data, isLoading, error} = useQuery(SerialKillerQueries.list({page: 1}));
     const {user} = useAuthStore()
 
     const title = 'Serial Killers';
@@ -32,7 +33,8 @@ function RouteComponent() {
 
     return (
         <PageView {...pageViewProps}>
-            <Row xs={1} md={2} className="g-4">
+                <PaginationCounter bePagination={data?.pagination}/>
+            <Row xs={1} md={3} lg={4} className="g-4">
                 {data?.items.map((entity, idx) => (
                     <Col key={idx}>
                         <ProfileCard serialKiller={entity}/>

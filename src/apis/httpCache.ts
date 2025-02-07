@@ -46,7 +46,7 @@ function sortObject(obj: Record<string, unknown>): Record<string, unknown> {
  * @param obj - The value to stringify.
  * @returns A JSON string representation with sorted keys for objects.
  */
-function objToStr(obj: unknown): string {
+export const objToStr = (obj: unknown): string => {
     if (obj === null || typeof obj !== "object") {
         return JSON.stringify(obj);
     }

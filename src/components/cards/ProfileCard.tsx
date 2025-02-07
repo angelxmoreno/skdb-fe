@@ -14,13 +14,11 @@ const ProfileCard: FC<ProfileCardProps> = ({serialKiller}) => {
                 <Card.Img
                     src={serialKiller.photo_url}
                     alt={serialKiller.name}
-                    style={{ height: '200px', width: '100%', objectFit: 'cover' }}
+                    style={{height: '200px', width: '100%', objectFit: 'cover'}}
                 />
             )}
-            <Card.Body>
-                {serialKiller?.id &&
-                    <Link to={'/serial-killers/$id'} params={{id: String(serialKiller.id)}}>View Profile</Link>}
-            </Card.Body>
+            {serialKiller?.id &&
+                <Link to={'/serial-killers/$id'} params={{id: String(serialKiller.id)}} className={'stretched-link'}></Link>}
         </Card>
     )
 }

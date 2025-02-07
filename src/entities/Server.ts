@@ -1,3 +1,7 @@
+export interface ListOptions {
+    page: number
+}
+
 export interface BePagination {
     count: number
     current: number

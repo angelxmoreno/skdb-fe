@@ -1,5 +1,5 @@
-import { AxiosInstance} from "axios";
-import {BaseEntity, ListResponse} from "@entities/Server";
+import {AxiosInstance} from "axios";
+import {BaseEntity, ListOptions, ListResponse} from "@entities/Server";
 import getUserJwt from "@hooks/getUserJwt";
 import beClient from "@apis/beClient";
 import {BeValidationException, isBeValidationError} from "@entities/ValidationError";
@@ -86,10 +86,10 @@ export class CrudApi<T extends BaseEntity> {
      * List resources.
      * GET /api/{resource}
      */
-    async list(): Promise<ListResponse<T>> {
+    async list(listOptions: ListOptions): Promise<ListResponse<T>> {
         const headers = this.getHeaders("list");
         const response = await this.axiosInstance.get<ListResponse<T>>(`/api/${this.resourcePath}`, {
-            params: {page: 1},
+            params: listOptions,
             headers,
         });
         return response.data;
@@ -131,7 +131,7 @@ export class CrudApi<T extends BaseEntity> {
             const response = await this.axiosInstance.post<T>(url, postData, {headers});
             return response.data;
         } catch (err: unknown) {
-            if(isBeValidationError<T>(err)) {
+            if (isBeValidationError<T>(err)) {
                 return err.response.data;
             }
             throw err;
