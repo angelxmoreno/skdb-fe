@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { Alert, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
 import { useAuthStore } from '@hooks/authStore' // Zustand store
 import { login } from '@apis/authApi' // Auth API function
-import { AuthResponse } from '@entities/Auth' // AuthResponse type
+import { AuthResponse } from '@entities/Auth'
+import {showError, showSuccess} from "@hooks/toastService"; // AuthResponse type
 
 export const Route = createFileRoute('/_auth/login')({
   component: LoginScreen,
@@ -32,12 +33,15 @@ function LoginScreen() {
       const response: AuthResponse = await login(email, password)
 
       if (response.status === 'SUCCESS') {
-        setAuthResponse(response)
+        setAuthResponse(response);
+        showSuccess('Login Successful');
         await navigate({ to: '/' })
       } else {
+        showError('Login Failed');
         setError(response.message)
       }
     } catch (error: unknown) {
+      showError('Login Failed');
       setError('Login failed. Please try again.')
       console.error({ error })
     } finally {

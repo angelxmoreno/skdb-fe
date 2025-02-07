@@ -1,25 +1,30 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Crumbs } from '@components/layout/pageContainer/BreadcrumbBuilder'
+import {createFileRoute} from '@tanstack/react-router'
+import {Crumbs} from '@components/layout/pageContainer/BreadcrumbBuilder'
 import PageView from '@components/layout/pageContainer/PageView'
+import {ButtonPropsArray} from "@components/layout/pageContainer/ButtonPropsBuilder";
+import SerialKillersForm from "@components/forms/SerialKillersForm";
 
 export const Route = createFileRoute('/_authenticated/serial-killers/create')({
-  component: RouteComponent,
+    component: RouteComponent,
 })
 
 function RouteComponent() {
-  const title = 'Serial Killers'
-  const subtitle = 'create'
-  const crumbs: Crumbs = [
-    { name: 'Home', uri: '/' },
-    { name: 'Serial Killers', uri: '/serial-killers' },
-    'Create',
-  ]
-  const errorText = undefined
-  const pageViewProps = { title, subtitle, crumbs, errorText }
+    const title = 'Create Serial Killer profile';
+    const buttonProps: ButtonPropsArray =
+        [
+            {sm: true, info: true, children: 'view all', to: '/serial-killers'}
+        ];
 
-  return (
-    <PageView {...pageViewProps}>
-      <h4>Create form</h4>
-    </PageView>
-  )
+    const crumbs: Crumbs = [
+        {name: 'Home', uri: '/'},
+        {name: 'Serial Killers', uri: '/serial-killers'},
+        'create'
+    ];
+
+    const pageViewProps = {title, buttonProps, crumbs};
+    return (
+        <PageView {...pageViewProps}>
+            <SerialKillersForm forEdit={false}/>
+        </PageView>
+    );
 }

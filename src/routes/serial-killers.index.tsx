@@ -1,32 +1,19 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {useQuery, UseQueryOptions} from '@tanstack/react-query'
-import {ListResponse} from "@entities/Server";
-import {SerialKiller} from "@entities/SerialKiller";
-import SerialKillersApi from "@apis/SerialKillersApi";
+import {useQuery} from '@tanstack/react-query'
 import ProfileCard from "@components/cards/ProfileCard";
 import {Col, Row} from "react-bootstrap";
 import PageView from "@components/layout/pageContainer/PageView";
 import {useAuthStore} from "@hooks/authStore";
 import {Crumbs} from "@components/layout/pageContainer/BreadcrumbBuilder";
 import {ButtonPropsArray} from "@components/layout/pageContainer/ButtonPropsBuilder";
-
-const keyName = 'SerialKiller';
-type Entity = SerialKiller;
-const api = SerialKillersApi;
-
-
-const listQuery: UseQueryOptions<ListResponse<Entity>> = {
-    queryKey: [`${keyName}List`],
-    queryFn: () => api.list(),
-    staleTime: 1000 * 60 * 2,
-}
+import SerialKillerQueries from "@apis/resources/SerialKillerQueries";
 
 export const Route = createFileRoute('/serial-killers/')({
     component: RouteComponent,
 })
 
 function RouteComponent() {
-    const {data, isLoading, error} = useQuery<ListResponse<Entity>>(listQuery);
+    const {data, isLoading, error} = useQuery(SerialKillerQueries.list);
     const {user} = useAuthStore()
 
     const title = 'Serial Killers';

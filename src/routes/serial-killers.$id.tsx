@@ -1,21 +1,12 @@
 import {createFileRoute} from '@tanstack/react-router';
-import {useQuery, UseQueryOptions} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {Card} from 'react-bootstrap';
-import SerialKillersApi from '@apis/SerialKillersApi';
 import {SerialKiller} from '@entities/SerialKiller';
 import {ButtonPropsArray} from "@components/layout/pageContainer/ButtonPropsBuilder";
 import {Crumbs} from "@components/layout/pageContainer/BreadcrumbBuilder";
 import {useAuthStore} from "@hooks/authStore";
 import PageView from "@components/layout/pageContainer/PageView";
-
-const keyName = 'SerialKiller';
-type Entity = SerialKiller;
-const api = SerialKillersApi;
-
-const viewQueryFunc = (id: string | number): UseQueryOptions<Entity> => ({
-    queryKey: [keyName, String(id)],
-    queryFn: () => api.read(id),
-})
+import SerialKillerQueries from "@apis/resources/SerialKillerQueries";
 
 export const Route = createFileRoute('/serial-killers/$id')({
     component: SerialKillerViewRoute,
@@ -26,7 +17,7 @@ function SerialKillerViewRoute() {
     const {user} = useAuthStore()
 
     // Fetch the serial killer details using TanStack Query.
-    const {data, isLoading, error} = useQuery<SerialKiller>(viewQueryFunc(id));
+    const {data, isLoading, error} = useQuery<SerialKiller>(SerialKillerQueries.view(id));
 
     const title = data?.name;
     const buttonProps: ButtonPropsArray = !user

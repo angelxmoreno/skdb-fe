@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAuthStore } from '@hooks/authStore'
 import { logout } from '@apis/authApi'
 import { Spinner, Alert, Container } from 'react-bootstrap'
+import {showSuccess} from "@hooks/toastService";
 
 export const Route = createFileRoute('/_auth/logout')({
   component: LogoutRoute,
@@ -20,6 +21,7 @@ function LogoutRoute() {
         navigate({ to: '/login' })
         return
       }
+
       try {
         await logout(token)
         setMessage('Successfully logged out.')
@@ -32,8 +34,9 @@ function LogoutRoute() {
         // Optionally, wait a moment so the user can see the final message
         setTimeout(() => {
           setIsLoading(false)
+          showSuccess('Logout Successful');
           navigate({ to: '/login' })
-        }, 2000)
+        }, 1500)
       }
     }
 
