@@ -1,3 +1,5 @@
+import {QueryClient} from "@tanstack/react-query";
+
 export interface AppConfig {
     API_BASE_URL: string;
     NODE_ENV: 'development' | 'production' | 'test';
@@ -9,3 +11,6 @@ const appConfig: AppConfig = {
 };
 
 export default appConfig;
+
+// Create a new QueryClient instance for TanStack Query
+export const queryClient = new QueryClient()

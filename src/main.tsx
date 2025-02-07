@@ -1,16 +1,11 @@
 import {StrictMode} from 'react'
 import ReactDOM from 'react-dom/client'
 import {createRouter, RouterProvider} from '@tanstack/react-router'
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {QueryClientProvider} from '@tanstack/react-query'
+import {routeTree} from "./routeTree.gen";
+import {queryClient} from "@config/index";
 
-// Import the generated route tree
-import {routeTree} from './routeTree.gen'
-
-// Create a new router instance
 const router = createRouter({routeTree})
-
-// Create a new QueryClient instance for TanStack Query
-const queryClient = new QueryClient()
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
