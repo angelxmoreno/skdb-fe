@@ -1,12 +1,13 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {useAuthStore} from "@hooks/authStore";
 import { useQuery} from "@tanstack/react-query";
-import {SerialKiller} from "@entities/SerialKiller";
+import {SerialKiller} from "@entities/Models";
 import {ButtonPropsArray} from "@components/layout/pageContainer/ButtonPropsBuilder";
 import {Crumbs} from "@components/layout/pageContainer/BreadcrumbBuilder";
 import PageView from "@components/layout/pageContainer/PageView";
 import SerialKillerQueries from "@apis/resources/SerialKillerQueries";
 import SerialKillersForm from "@components/forms/SerialKillersForm";
+import QuestionAnswerForm from "@components/forms/QuestionAnswerForm";
 
 export const Route = createFileRoute('/_authenticated/serial-killers/edit/$id')(
     {
@@ -48,6 +49,8 @@ function RouteComponent() {
             {!!viewQuery.data && (
                 <SerialKillersForm entity={viewQuery.data}/>
             )}
+            <hr/>
+            <QuestionAnswerForm serialKillerId={id}/>
         </PageView>
     );
 }

@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import {LoadingButtonProps} from "@components/layout/nav/LoadingButton";
-import {SerialKiller} from "@entities/SerialKiller";
+import {SerialKiller} from "@entities/Models";
 import {FC} from "react";
 import {useMutation} from "@tanstack/react-query";
 import SerialKillerQueries from "@apis/resources/SerialKillerQueries";
@@ -8,7 +8,7 @@ import {showError, showSuccess} from "@hooks/toastService";
 import {useNavigate} from "@tanstack/react-router";
 import {setErrorsFromValidationError} from "@entities/ValidationError";
 import {UseFormReturn} from "react-hook-form";
-import FormBuilder, {FieldConfig} from "@components/forms/FormBuilder";
+import FormBuilder, {FieldConfig} from "@components/forms/core/FormBuilder";
 
 // --------------------------
 // Types & Default Values

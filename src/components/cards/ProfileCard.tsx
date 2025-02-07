@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Card} from "react-bootstrap";
-import {SerialKiller} from "@entities/SerialKiller";
+import {SerialKiller} from "@entities/Models";
 import {Link} from "@tanstack/react-router";
 
 type ProfileCardProps = {

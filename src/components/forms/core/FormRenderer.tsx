@@ -1,12 +1,12 @@
-import TextInput from "@components/forms/inputs/TextInput";
-import TextareaInput from "@components/forms/inputs/TextareaInput";
-import DatePickerInput from "@components/forms/inputs/DatePickerInput";
-import SwitchInput from "@components/forms/inputs/SwitchInput";
-import RadioGroupInput from "@components/forms/inputs/RadioGroupInput";
-import SelectInput from "@components/forms/inputs/SelectInput";
-import CheckboxGroupInput from "@components/forms/inputs/CheckboxGroupInput";
-import SingleImageUploadInput from "@components/forms/inputs/SingleImageUploadInput";
-import {FieldConfig} from "@components/forms/FormBuilder";
+import TextInput from "@components/forms/core/inputs/TextInput";
+import TextareaInput from "@components/forms/core/inputs/TextareaInput";
+import DatePickerInput from "@components/forms/core/inputs/DatePickerInput";
+import SwitchInput from "@components/forms/core/inputs/SwitchInput";
+import RadioGroupInput from "@components/forms/core/inputs/RadioGroupInput";
+import SelectInput from "@components/forms/core/inputs/SelectInput";
+import CheckboxGroupInput from "@components/forms/core/inputs/CheckboxGroupInput";
+import SingleImageUploadInput from "@components/forms/core/inputs/SingleImageUploadInput";
+import {FieldConfig} from "@components/forms/core/FormBuilder";
 import {FieldValues} from "react-hook-form";
 
 type FormRendererProps<TFormValues extends FieldValues> = {

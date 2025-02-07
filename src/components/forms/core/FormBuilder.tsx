@@ -2,7 +2,7 @@ import {DefaultValues, FieldValues, FormProvider, Resolver, useForm,} from "reac
 import {ObjectSchema} from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
 import LoadingButton, {LoadingButtonProps} from "@components/layout/nav/LoadingButton";
-import FormRenderer from "@components/forms/FormRenderer";
+import FormRenderer from "@components/forms/core/FormRenderer";
 
 // Generic FieldConfig type, where "name" is constrained to be a key of TFormValues.
 export interface FieldConfig<TFormValues> {
