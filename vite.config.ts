@@ -5,6 +5,7 @@ import {TanStackRouterVite} from '@tanstack/router-plugin/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+    define: { 'process.env.NODE_ENV': '"production"' },
     plugins: [
         TanStackRouterVite({autoCodeSplitting: true}),
         react()
