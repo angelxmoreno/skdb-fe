@@ -1,7 +1,13 @@
 import { create, type StateCreator } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { AuthResponse, AuthUser, SUCCESS } from '@entities/Auth';
+
+// Define the expected payload structure for your JWT.
+// Typically, the expiration is stored in the "exp" field as a UNIX timestamp.
+interface TokenPayload {
+    exp: number;
+}
 
 interface State {
     user: AuthUser | null;
@@ -16,36 +22,63 @@ interface Actions {
 
 type Store = State & Actions;
 
-// Define the expected payload structure for your JWT.
-// Typically, the expiration is stored in the "exp" field as a UNIX timestamp.
-interface TokenPayload {
-    exp: number;
-}
-
 const initialState: State = {
     user: null,
     token: null,
     authMessage: null,
 };
 
-// A module-level variable to track the logout timeout.
-// This allows us to clear any pending logout when a new token is set.
+// Module-level variable to track the logout timeout.
 let logoutTimerId: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Helper function that decodes the JWT, calculates the timeout duration,
+ * and schedules a logout action when the token expires.
+ *
+ * @param token - The JWT token string.
+ * @param logOutAction - The logout function from the store.
+ * @param getState - A function that returns the current store state.
+ * @returns A timer ID if scheduled, or null.
+ */
+const scheduleLogoutFromToken = (
+    token: string,
+    logOutAction: () => void,
+    getState: () => { token: string | null }
+): ReturnType<typeof setTimeout> | null => {
+    try {
+        const decoded = jwtDecode<TokenPayload>(token);
+        const expTime = decoded.exp * 1000; // Convert seconds to milliseconds.
+        const now = Date.now();
+        const timeoutDuration = expTime - now;
+
+        if (timeoutDuration > 0) {
+            return setTimeout(() => {
+                // Ensure the token hasn't changed before logging out.
+                if (getState().token === token) {
+                    logOutAction();
+                }
+            }, timeoutDuration);
+        } else {
+            // Token already expired, log out immediately.
+            logOutAction();
+            return null;
+        }
+    } catch (error) {
+        console.error('Failed to decode JWT:', error);
+        logOutAction();
+        return null;
+    }
+};
 
 const stateCreator: StateCreator<Store> = (set, get) => ({
     ...initialState,
 
     /**
      * Sets the authentication response.
-     *
-     * If the response indicates success, the user and token are stored. The JWT is decoded to determine
-     * when it expires. A timeout is then scheduled that will call logOutAction when the token expires.
-     * If a previous logout timeout exists, it is cleared.
-     *
-     * @param response - The authentication response containing the JWT and user data.
+     * If successful, decodes the JWT and schedules a logout when it expires.
      */
     setAuthResponse: (response: AuthResponse) => {
-        // Clear any previously scheduled logout
+        // Clear any previously scheduled logout.
         if (logoutTimerId) {
             clearTimeout(logoutTimerId);
             logoutTimerId = null;
@@ -58,32 +91,10 @@ const stateCreator: StateCreator<Store> = (set, get) => ({
                 authMessage: null,
             });
 
-            try {
-                // Decode the token to extract the expiration time.
-                const decoded = jwtDecode<TokenPayload>(response.jwt);
-                const expTime = decoded.exp * 1000; // convert from seconds to milliseconds
-                const now = Date.now();
-                const timeoutDuration = expTime - now;
-
-                // Only schedule a logout if the expiration is in the future.
-                if (timeoutDuration > 0) {
-                    logoutTimerId = setTimeout(() => {
-                        // Optionally, you can check if the token is still the same.
-                        if (get().token === response.jwt) {
-                            get().logOutAction();
-                        }
-                    }, timeoutDuration);
-                } else {
-                    // If the token is already expired, log out immediately.
-                    get().logOutAction();
-                }
-            } catch (error) {
-                console.error('Failed to decode JWT:', error);
-                // In case of any error decoding the token, sign the user out.
-                get().logOutAction();
-            }
+            // Schedule logout based on token expiration.
+            logoutTimerId = scheduleLogoutFromToken(response.jwt, get().logOutAction, get);
         } else {
-            // If the authentication is not successful, clear any stored values.
+            // On failure, clear the state.
             set({
                 user: null,
                 token: null,
@@ -93,11 +104,9 @@ const stateCreator: StateCreator<Store> = (set, get) => ({
     },
 
     /**
-     * Logs out the user by clearing user data, token, and auth messages.
-     * Any scheduled logout timer is also cleared.
+     * Logs out the user by clearing stored data and any scheduled logout timer.
      */
     logOutAction: () => {
-        // Clear any pending logout timer.
         if (logoutTimerId) {
             clearTimeout(logoutTimerId);
             logoutTimerId = null;
@@ -106,9 +115,22 @@ const stateCreator: StateCreator<Store> = (set, get) => ({
     },
 });
 
+// Define the persist configuration.
+// onRehydrateStorage's callback receives a raw state object;
+// here, we delay its execution using setTimeout to allow useAuthStore to be initialized.
 const persistedStorage = persist(stateCreator, {
     name: 'auth-storage',
     storage: createJSONStorage(() => sessionStorage),
+    onRehydrateStorage: () => {
+        setTimeout(() => {
+            // Now it is safe to reference useAuthStore.
+            const { token, logOutAction } = useAuthStore.getState();
+            if (token) {
+                logoutTimerId = scheduleLogoutFromToken(token, logOutAction, useAuthStore.getState);
+            }
+        }, 0);
+    },
 });
 
+// Create and export the store.
 export const useAuthStore = create<Store>()(persistedStorage);

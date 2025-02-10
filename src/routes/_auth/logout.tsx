@@ -18,7 +18,7 @@ function LogoutRoute() {
   useEffect(() => {
     const handleLogout = async () => {
       if (!token) {
-        navigate({ to: '/login' })
+        await navigate({ to: '/login' })
         return
       }
 
@@ -40,7 +40,7 @@ function LogoutRoute() {
       }
     }
 
-    handleLogout()
+     handleLogout().catch(console.error)
   }, [token, logOutAction, navigate])
 
   return (
