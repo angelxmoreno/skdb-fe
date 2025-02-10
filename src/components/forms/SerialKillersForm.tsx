@@ -67,7 +67,10 @@ const SerialKillerForm: FC<SerialKillerFormProps> = ({entity, forEdit = true}) =
     ) => {
         console.log("Form submitted:", {data});
 
-        await saveMutation.mutateAsync(data, {
+        await saveMutation.mutateAsync({
+            ...data,
+            id: entity?.id,
+        }, {
             onSuccess: async (result) => {
                 showSuccess(`Serial Killer profile ${forEdit ? "update" : "create"} success`);
                 await navigate({
